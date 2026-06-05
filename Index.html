@@ -1,0 +1,921 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Special Gift for Didi ✨</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Playful & Elegant Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@300..700&family=Playfair+Display:ital,wght@0,500..800;1,500..800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Fredoka', sans-serif;
+      background: linear-gradient(135deg, #fdf4f5 0%, #f3e8ff 100%);
+      background-image: radial-gradient(#e1bee7 1.2px, transparent 1.2px);
+      background-size: 20px 20px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .serif-title { font-family: 'Playfair Display', serif; }
+    .handwriting { font-family: 'Caveat', cursive; }
+    
+    /* Elegant Page Transitions */
+    .animate-fade-in {
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating Effect for Elements */
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
+    }
+    .floating { animation: floatY 4s ease-in-out infinite; }
+
+    /* Custom CSS Lock Animation */
+    .lock-shackle {
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: left bottom;
+    }
+    .unlocked .lock-shackle {
+      transform: translateY(-15px) rotate(-22deg);
+    }
+    
+    /* Error Shake Animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .shake { animation: shake 0.4s ease-in-out; }
+
+    /* Elegant Custom Page Turn Animation that stays inside bounds */
+    .album-viewport {
+      perspective: 1200px;
+      width: 100%;
+      max-width: 310px;
+      height: 220px;
+      position: relative;
+    }
+    
+    .album-card {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.12);
+      backface-visibility: hidden;
+    }
+
+    /* Page Turn Animation States: Exit to left with rotation, then reset */
+    .album-card.active {
+      transform: rotateY(0deg) scale(1);
+      opacity: 1;
+      z-index: 10;
+      pointer-events: auto;
+    }
+    
+    .album-card.prev-out {
+      transform: rotateY(-75deg) translateX(-120%) scale(0.85);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    .album-card.next-in {
+      transform: rotateY(75deg) translateX(120%) scale(0.85);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar { width: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #e0b0ff; border-radius: 10px; }
+    
+    /* Confetti Particle Styling */
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body class="flex justify-center items-center p-4">
+
+  <!-- Main Mobile Shell Container -->
+  <div class="w-full max-w-md bg-white/50 backdrop-blur-xl rounded-[38px] shadow-2xl border-4 border-white/80 overflow-hidden relative flex flex-col justify-between min-h-[85vh]">
+    
+    <!-- HEADER BAR -->
+    <div class="px-6 py-4 flex justify-between items-center bg-white/40 border-b border-purple-100/40">
+      <button onclick="prevPage()" id="headerBackBtn" class="px-3.5 py-1.5 bg-white rounded-full text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 transition active:scale-95 flex items-center gap-1 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-chevron-left text-[10px]"></i> Back
+      </button>
+      <span class="text-xs tracking-widest text-purple-600 font-bold uppercase" id="headerTitle">PAGE 1 / 9</span>
+      <span class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
+    </div>
+
+    <!-- MAIN PAGE CONTAINER -->
+    <div class="flex-grow flex flex-col justify-center items-center p-6 relative">
+
+      <!-- ========================================== -->
+      <!-- PAGE 1: PASS-CODE LOCK SCREEN -->
+      <!-- ========================================== -->
+      <div id="page1" class="w-full flex flex-col items-center justify-center text-center space-y-6 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-bold tracking-widest border border-purple-100 uppercase">
+          🔒 Private Space
+        </span>
+        
+        <div class="space-y-1">
+          <h1 class="serif-title text-3xl font-bold text-slate-800">Locked Surprise</h1>
+          <p class="text-xs text-slate-500 font-medium">Enter Password to open Didi's gift</p>
+        </div>
+
+        <!-- CSS Styled Interactive Key Lock -->
+        <div id="lockWrapper" class="relative w-24 h-28 my-2 transition-transform duration-300 hover:scale-105">
+          <!-- Shackle / Hook -->
+          <svg class="lock-shackle absolute top-0 left-6 w-12 h-16" viewBox="0 0 50 60" fill="none">
+            <path d="M 10 50 L 10 25 C 10 10, 40 10, 40 25 L 40 50" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round" fill="none"/>
+          </svg>
+          <!-- Lock Body -->
+          <div class="absolute bottom-0 left-0 w-24 h-16 bg-gradient-to-tr from-pink-400 to-purple-500 rounded-2xl shadow-md flex items-center justify-center border-b-4 border-purple-600">
+            <!-- Keyhole inside lock -->
+            <div class="w-4 h-4 bg-white rounded-full relative">
+              <div class="absolute top-3 left-1 w-2 h-3.5 bg-white rounded-b-sm"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Styled Password Input Box -->
+        <div class="w-full max-w-[260px] space-y-3">
+          <div class="relative">
+            <input type="password" id="passwordInput" placeholder="Enter code..." class="w-full px-5 py-3 rounded-2xl border-2 border-purple-100 bg-white/80 text-center font-bold tracking-wider text-slate-700 placeholder:text-slate-400/70 focus:outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all text-sm">
+            <button onclick="revealPassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <i id="eyeIcon" class="fa-solid fa-eye-slash text-xs"></i>
+            </button>
+          </div>
+          
+          <button onclick="validatePassword()" class="w-full py-3.5 bg-gradient-to-r from-pink-400 to-purple-500 hover:from-pink-500 hover:to-purple-600 text-white font-bold rounded-2xl shadow-md active:scale-95 transition text-xs tracking-widest uppercase">
+            Unlock Magic ✨
+          </button>
+          
+          <p id="lockErrorMsg" class="text-[11px] text-red-500 font-semibold opacity-0 transition-opacity duration-300">
+            Aise kaise Didi, wrong password! 🤫 Hint: b_ _ _ _ _4
+          </p>
+        </div>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 2: SPECIAL THANK YOU NOTE FOR KHUSHI -->
+      <!-- ========================================== -->
+      <div id="page2" class="w-full hidden flex-col items-center justify-center text-center space-y-6 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 text-amber-600 text-[10px] font-bold tracking-widest border border-amber-100 uppercase">
+          📝 A Small Dedication
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">For a Precious Friend</h2>
+
+        <!-- Scrapbook Card -->
+        <div class="w-full bg-yellow-50/70 p-5 rounded-3xl border border-yellow-200/50 shadow-inner relative text-left">
+          <!-- Cute Tape Decoration -->
+          <div class="absolute -top-3 left-1/3 w-20 h-6 bg-yellow-200/60 rotate-2 backdrop-blur-xs border-x border-dashed border-yellow-400/30"></div>
+          
+          <div class="custom-scroll max-h-[250px] overflow-y-auto pr-2 space-y-3">
+            <p class="handwriting text-2xl text-slate-700 leading-relaxed">
+              Ye website bhi bus Khushi ji ki vajah se ban payi hai kyunki agar vo dost nahi hoti toh shayad ye website nahi bana sakta tha... <br><br>
+              And mein ek chiz bolunga jo mujhe Khushi mein achi lagti hai - vo sabki help karti hai and apni family ki har baat maanti hai, special apne Papa ji ki. <br><br>
+              Bus ye choti chiz hai, toh bhaut kuch batane ke liye par abhi bus idhar hi bataunga kyunki aage bhi website dekhni hai toh ab aap aage dekh sakte ho! ❤️
+            </p>
+          </div>
+        </div>
+
+        <button onclick="nextPage()" class="px-8 py-3 bg-slate-800 text-white font-semibold rounded-full shadow-lg hover:bg-slate-700 active:scale-95 transition text-xs tracking-wider uppercase flex items-center gap-2">
+          Aage Dekhein <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 3: MUSIC INTERLUDE -->
+      <!-- ========================================== -->
+      <div id="page3" class="w-full hidden flex-col items-center justify-center text-center space-y-7 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold tracking-widest border border-blue-100 uppercase">
+          🎵 Chalo Gana Sunte Hain
+        </span>
+
+        <h2 class="serif-title text-3xl font-bold text-slate-800 leading-tight">
+          Website mein aage <br>badne se pehle...
+        </h2>
+
+        <!-- Interactive Disc Player -->
+        <div class="relative my-4">
+          <div id="musicDisc" class="w-32 h-32 rounded-full bg-slate-900 border-4 border-double border-pink-200 shadow-xl flex items-center justify-center transition-transform duration-[4000ms] ease-linear">
+            <!-- Vinyl Lines Graphic -->
+            <div class="w-24 h-24 rounded-full border border-slate-700/60 flex items-center justify-center">
+              <div class="w-16 h-16 rounded-full border border-slate-700/40 flex items-center justify-center">
+                <!-- Center Label -->
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-300 to-purple-400 flex items-center justify-center text-white text-xs">
+                  <i class="fa-solid fa-music"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cute Playful Note Bubbles -->
+          <span class="absolute -top-2 -left-2 text-2xl animate-bounce">🎶</span>
+          <span class="absolute -bottom-2 -right-2 text-2xl animate-pulse">🌸</span>
+        </div>
+
+        <p class="handwriting text-2xl text-purple-700/80 font-bold px-4 leading-normal">
+          "Ek pyari si dhun aapke chehre par smile lane ke liye!"
+        </p>
+
+        <!-- Dynamic Control Bar -->
+        <div class="w-full max-w-[280px] bg-white rounded-2xl p-4 shadow-sm border border-purple-100/50 flex items-center justify-between">
+          <div class="text-left">
+            <h4 class="text-xs font-bold text-slate-700">Special Melodious Tune</h4>
+            <p id="musicStatusText" class="text-[9px] text-pink-500 uppercase tracking-widest font-extrabold mt-0.5">Paused</p>
+          </div>
+          
+          <button onclick="toggleMusic()" class="w-10 h-10 rounded-full bg-pink-400 hover:bg-pink-500 text-white flex items-center justify-center shadow-md active:scale-90 transition shrink-0">
+            <i id="playIcon" class="fa-solid fa-play ml-0.5 text-xs"></i>
+          </button>
+        </div>
+
+        <button onclick="nextPage()" class="px-8 py-3.5 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-bold rounded-full shadow-lg active:scale-95 transition text-xs tracking-widest uppercase">
+          Aage Chalein 🥳
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 4: CARING NATURE & QUALITIES -->
+      <!-- ========================================== -->
+      <div id="page4" class="w-full hidden flex-col items-center justify-center text-center space-y-4 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-50 text-pink-600 text-[10px] font-bold tracking-widest border border-pink-100 uppercase">
+          🛡️ The Savior Didi
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">You're So Caring! 💖</h2>
+
+        <!-- Beautiful Floating Illustration -->
+        <div class="relative w-20 h-20 my-1 flex items-center justify-center bg-pink-100/60 rounded-full border-2 border-dashed border-pink-300 floating">
+          <svg class="w-12 h-12 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M12 6.5s-2.5-2.5-4.5 0c-2 2.5 0 5.5 4.5 9 4.5-3.5 6.5-6.5 4.5-9-2-2.5-4.5 0-4.5 0z" />
+          </svg>
+          <span class="absolute -top-1 -right-2 text-xl">✨</span>
+        </div>
+
+        <!-- Heartfelt revelation card -->
+        <div class="w-full bg-white/95 px-5 py-4 rounded-3xl border border-pink-100/50 shadow-md text-slate-700">
+          <p class="handwriting text-2xl leading-normal">
+            "Mujhe Khushi ne bataya tha ki aap use bachati ho... yani agar vo kahin fass jaye toh us situation se bachati ho, aur isse pata chalta hai ki aap kitni <strong class="text-pink-500 font-bold">Kind and Caring</strong> ho!"
+          </p>
+        </div>
+
+        <!-- Qualities Grid -->
+        <div class="w-full max-w-[340px] bg-purple-50/60 p-3.5 rounded-2xl border border-purple-100 text-left">
+          <p class="text-[11px] text-purple-700 font-bold uppercase tracking-widest mb-2 text-center">✨ Your Sparkling Qualities ✨</p>
+          <div class="grid grid-cols-2 gap-2 text-[10px] font-bold text-purple-800">
+            <div class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-purple-100 shadow-xs">
+              <span>💖</span> Kind and caring
+            </div>
+            <div class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-purple-100 shadow-xs">
+              <span>💪</span> Hardworking
+            </div>
+            <div class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-purple-100 shadow-xs">
+              <span>📋</span> Responsible
+            </div>
+            <div class="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-lg border border-purple-100 shadow-xs">
+              <span>🤝</span> Helpful
+            </div>
+            <div class="flex items-center gap-1.5 col-span-2 justify-center bg-white px-2.5 py-1.5 rounded-lg border border-purple-100 shadow-xs">
+              <span>🌟</span> Positive attitude ho!
+            </div>
+          </div>
+        </div>
+
+        <button onclick="nextPage()" class="px-8 py-3 bg-slate-800 text-white font-semibold rounded-full shadow-lg hover:bg-slate-700 active:scale-95 transition text-xs tracking-wider uppercase flex items-center gap-2">
+          Next Secret <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 5: COOKING QUEEN BURGER STORY -->
+      <!-- ========================================== -->
+      <div id="page5" class="w-full hidden flex-col items-center justify-center text-center space-y-4 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold tracking-widest border border-emerald-100 uppercase">
+          🍳 Master Chef Didi
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">Best Cooking Award! 🏆</h2>
+
+        <!-- Interactive Polaroid showcasing the Burger info -->
+        <div class="bg-white p-3 pb-4 rounded-2xl shadow-md border border-slate-100 w-full max-w-[280px] transform -rotate-1">
+          <div class="bg-amber-50 h-32 rounded-lg flex flex-col items-center justify-center overflow-hidden relative border border-amber-100">
+            <!-- Vector Burger -->
+            <svg class="w-20 h-20 floating" viewBox="0 0 100 100">
+              <!-- Top Bun -->
+              <path d="M20 50 C20 25, 80 25, 80 50 Z" fill="#e0a96d" />
+              <!-- Sesame seeds -->
+              <circle cx="35" cy="38" r="1.5" fill="#fff" />
+              <circle cx="48" cy="33" r="1.5" fill="#fff" />
+              <circle cx="62" cy="36" r="1.5" fill="#fff" />
+              <!-- Lettuce layer -->
+              <path d="M16 52 Q24 48, 32 52 Q40 48, 48 52 Q56 48, 64 52 Q72 48, 84 52" stroke="#4caf50" stroke-width="4" stroke-linecap="round" fill="none" />
+              <!-- Cheese slice -->
+              <polygon points="18,54 82,54 74,62 26,62" fill="#ffeb3b" />
+              <!-- Patty -->
+              <rect x="22" y="60" width="56" height="10" rx="4" fill="#8d6e63" />
+              <!-- Bottom Bun -->
+              <path d="M20 70 C20 78, 80 78, 80 70 Z" fill="#e0a96d" />
+            </svg>
+            <span class="absolute top-2 right-3 text-xl">😋</span>
+          </div>
+          <p class="handwriting text-lg text-slate-600 font-bold mt-2">"Burger was super yummy!"</p>
+        </div>
+
+        <!-- Custom Burger note exactly as requested -->
+        <div class="bg-emerald-50/70 p-5 rounded-3xl border border-emerald-100 text-left w-full max-w-[340px]">
+          <p class="handwriting text-2xl text-slate-700 leading-relaxed">
+            "Khushi ne bhi batya tha ki aap ko cooking aati hai and apne ek baar burger bhi banya tha and vo school bhi layi thi mene bhi thoda sa kahya tha bahut yummy 😋 tha best cooking award toh apko milna chahiye tha!"
+          </p>
+        </div>
+
+        <button onclick="nextPage()" class="px-8 py-3 bg-slate-800 text-white font-semibold rounded-full shadow-lg hover:bg-slate-700 active:scale-95 transition text-xs tracking-wider uppercase flex items-center gap-2">
+          View Memories <i class="fa-solid fa-images"></i>
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 6: SHORT MEMORIES CAROUSEL (5 PHOTOS) -->
+      <!-- ========================================== -->
+      <div id="page6" class="w-full hidden flex-col items-center justify-center text-center space-y-5 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-violet-50 text-violet-600 text-[10px] font-bold tracking-widest border border-violet-100 uppercase">
+          📸 Short Memory Slides
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">Sweet Moments</h2>
+
+        <!-- Responsive Slider Frame -->
+        <div class="relative w-full max-w-[280px]">
+          <!-- Arrow Left -->
+          <button onclick="prevSlide()" class="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-md border border-purple-100 text-purple-600 flex items-center justify-center active:scale-90 transition z-10">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+          </button>
+          
+          <!-- Arrow Right -->
+          <button onclick="nextSlide()" class="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-md border border-purple-100 text-purple-600 flex items-center justify-center active:scale-90 transition z-10">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </button>
+
+          <!-- Polaroid Wrapper -->
+          <div class="bg-white p-3 pb-5 rounded-2xl shadow-xl border border-slate-100 transform rotate-1 transition-transform duration-300">
+            <div class="aspect-square w-full rounded-xl overflow-hidden relative bg-purple-50 flex items-center justify-center">
+              
+              <!-- Carousel Images (Rendered as beautiful stylized illustrations/SVG) -->
+              <div id="p6-slide1" class="slide6-item w-full h-full flex flex-col justify-center items-center bg-[#ffebee]">
+                <span class="text-6xl animate-bounce">🏠</span>
+                <p class="text-[10px] text-red-500 font-extrabold uppercase mt-3 tracking-widest">Home Sweet Home</p>
+              </div>
+              
+              <div id="p6-slide2" class="slide6-item hidden w-full h-full flex flex-col justify-center items-center bg-[#e8eaf6]">
+                <span class="text-6xl animate-pulse">👭</span>
+                <p class="text-[10px] text-indigo-500 font-extrabold uppercase mt-3 tracking-widest">Sister Bond</p>
+              </div>
+
+              <div id="p6-slide3" class="slide6-item hidden w-full h-full flex flex-col justify-center items-center bg-[#e0f2f1]">
+                <span class="text-6xl">🍲</span>
+                <p class="text-[10px] text-teal-500 font-extrabold uppercase mt-3 tracking-widest">Masterpiece Cooking</p>
+              </div>
+
+              <div id="p6-slide4" class="slide6-item hidden w-full h-full flex flex-col justify-center items-center bg-[#fff8e1]">
+                <span class="text-6xl animate-bounce">🎁</span>
+                <p class="text-[10px] text-amber-500 font-extrabold uppercase mt-3 tracking-widest">Special Surprise</p>
+              </div>
+
+              <div id="p6-slide5" class="slide6-item hidden w-full h-full flex flex-col justify-center items-center bg-[#f3e5f5]">
+                <span class="text-6xl">😇</span>
+                <p class="text-[10px] text-purple-500 font-extrabold uppercase mt-3 tracking-widest">Guardian Angel</p>
+              </div>
+
+            </div>
+            
+            <!-- Custom Requested Caption -->
+            <p id="slide6Caption" class="handwriting text-xl text-slate-700 font-semibold mt-3 min-h-[50px] px-1 leading-snug">
+              "har photos mein khushi ,aap and apki family kitni achi hai agar mein jhooth bol raha hu toh aap sari photos dekh lo"
+            </p>
+          </div>
+
+          <!-- Pagination dots -->
+          <div class="flex justify-center gap-1.5 mt-3">
+            <span id="dot6-1" class="w-2 h-2 rounded-full bg-purple-500 transition-all"></span>
+            <span id="dot6-2" class="w-1.5 h-1.5 rounded-full bg-purple-200 transition-all"></span>
+            <span id="dot6-3" class="w-1.5 h-1.5 rounded-full bg-purple-200 transition-all"></span>
+            <span id="dot6-4" class="w-1.5 h-1.5 rounded-full bg-purple-200 transition-all"></span>
+            <span id="dot6-5" class="w-1.5 h-1.5 rounded-full bg-purple-200 transition-all"></span>
+          </div>
+        </div>
+
+        <button onclick="nextPage()" class="px-8 py-3 bg-slate-800 text-white font-semibold rounded-full shadow-lg hover:bg-slate-700 active:scale-95 transition text-xs tracking-wider uppercase flex items-center gap-2">
+          Mini Video <i class="fa-solid fa-circle-play"></i>
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 7: MINI VIDEO SECTION -->
+      <!-- ========================================== -->
+      <div id="page7" class="w-full hidden flex-col items-center justify-center text-center space-y-6 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-50 text-pink-600 text-[10px] font-bold tracking-widest border border-pink-100 uppercase">
+          🎬 Cute Video Box
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">A Short Dedicated Video</h2>
+
+        <!-- Video Card Frame -->
+        <div class="w-full max-w-[300px] aspect-video bg-slate-900 rounded-2xl overflow-hidden relative shadow-lg border border-purple-100 flex items-center justify-center group">
+          
+          <!-- Simulated thumbnail -->
+          <div id="videoThumbnail" class="absolute inset-0 bg-gradient-to-tr from-purple-900/80 to-pink-500/80 flex flex-col items-center justify-center z-10 text-white p-4 transition-all">
+            <div class="w-14 h-14 rounded-full bg-white text-pink-500 flex items-center justify-center shadow-lg transform group-hover:scale-110 active:scale-95 transition cursor-pointer" onclick="playMockVideo()">
+              <i class="fa-solid fa-play text-xl ml-1"></i>
+            </div>
+            <p class="text-xs font-semibold mt-3 tracking-wide">Click to view virtual clip 🍿</p>
+          </div>
+
+          <!-- Mock Video Player Action -->
+          <div id="mockVideoPlaying" class="hidden flex-col items-center justify-center text-center p-4 text-white z-20 space-y-2">
+            <span class="text-4xl animate-spin text-pink-400"><i class="fa-solid fa-compact-disc"></i></span>
+            <p class="text-xs font-bold tracking-widest uppercase text-pink-300">Didi Special Memory Video</p>
+            <p class="text-[10px] text-slate-400">Audio & Visuals playing inside your heart!</p>
+            <button onclick="stopMockVideo()" class="px-3 py-1 bg-white/20 hover:bg-white/30 rounded-full text-[9px] font-bold uppercase transition">Reset</button>
+          </div>
+
+        </div>
+
+        <p class="handwriting text-xl text-purple-700/80 font-bold px-4">
+          "Kuch purane din, purani yaadein aur unki khubsurat recording."
+        </p>
+
+        <button onclick="nextPage()" class="px-8 py-3 bg-slate-800 text-white font-semibold rounded-full shadow-lg hover:bg-slate-700 active:scale-95 transition text-xs tracking-wider uppercase flex items-center gap-2">
+          Mini Album <i class="fa-solid fa-images"></i>
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 8: COMPACT CAROUSEL BOOK ALBUM (NO CLIPPING BUG) -->
+      <!-- ========================================== -->
+      <div id="page8" class="w-full hidden flex-col items-center justify-center text-center space-y-5 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 text-amber-600 text-[10px] font-bold tracking-widest border border-amber-100 uppercase">
+          📖 Interactive Album Book
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">Didi's Album ✨</h2>
+
+        <!-- Interactive 3D Card-Flip Album Viewport -->
+        <div class="album-viewport my-1">
+          
+          <!-- COVER SHEET (PAGE 0) -->
+          <div class="album-card active" id="albumPage0">
+            <div class="w-full h-full bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl border-2 border-dashed border-purple-300/80 p-5 flex flex-col justify-center items-center text-center relative overflow-hidden">
+              <span class="text-5xl mb-2 animate-bounce">🏡</span>
+              <p class="text-xs font-extrabold tracking-widest text-purple-800 uppercase">Didi's Book Cover</p>
+              <p class="text-[10px] text-slate-500 font-bold mt-1">Our Beautiful Sweet Family</p>
+              <div class="absolute bottom-3 right-4 text-[9px] font-bold text-purple-600 animate-pulse">Tap Next →</div>
+            </div>
+          </div>
+
+          <!-- PAGE 1 -->
+          <div class="album-card next-in" id="albumPage1">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">👩‍❤️‍👩</span>
+              <p class="text-xs font-bold text-pink-600 uppercase">Page 1: Sisterly Devotion</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Khushi ki dhal ban kar khadi rehti hain Didi.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 2 -->
+          <div class="album-card next-in" id="albumPage2">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">🍔</span>
+              <p class="text-xs font-bold text-emerald-600 uppercase">Page 2: Special Burger Day</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">School me laaye huye yummy bites ka swaad!</p>
+            </div>
+          </div>
+
+          <!-- PAGE 3 -->
+          <div class="album-card next-in" id="albumPage3">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">😇</span>
+              <p class="text-xs font-bold text-amber-600 uppercase">Page 3: Protective Guardian</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Har situation me solution nikalne wali didi.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 4 -->
+          <div class="album-card next-in" id="albumPage4">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">💖</span>
+              <p class="text-xs font-bold text-red-500 uppercase">Page 4: Caring Nature</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Jo dher sara pyar aur respect hamesha dikhati hain.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 5 -->
+          <div class="album-card next-in" id="albumPage5">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">✨</span>
+              <p class="text-xs font-bold text-violet-600 uppercase">Page 5: Endless Support</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Hamesha har mod par sahi raah dikhana.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 6 -->
+          <div class="album-card next-in" id="albumPage6">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">🍨</span>
+              <p class="text-xs font-bold text-blue-500 uppercase">Page 6: Fun Treat Times</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Choti-choti treats me basi badi khushiyan.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 7 -->
+          <div class="album-card next-in" id="albumPage7">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">🌾</span>
+              <p class="text-xs font-bold text-teal-600 uppercase">Page 7: Family Grounding</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Apne Papa ji ki har baat maanney ka respect.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 8 -->
+          <div class="album-card next-in" id="albumPage8">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">🍫</span>
+              <p class="text-xs font-bold text-orange-600 uppercase">Page 8: Sweet Fight Nights</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Gusse ke piche chupa dher saara care.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 9 -->
+          <div class="album-card next-in" id="albumPage9">
+            <div class="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-slate-100">
+              <span class="text-4xl mb-2">🎁</span>
+              <p class="text-xs font-bold text-pink-500 uppercase">Page 9: Hidden Blessings</p>
+              <p class="text-[10px] text-slate-400 mt-1.5 px-4 leading-normal">Har roz ek nayi aur pyari subah didi ke sath.</p>
+            </div>
+          </div>
+
+          <!-- PAGE 10 -->
+          <div class="album-card next-in" id="albumPage10">
+            <div class="w-full h-full bg-gradient-to-tr from-purple-50 to-pink-50 rounded-2xl p-5 flex flex-col justify-center items-center text-center relative border border-purple-100">
+              <span class="text-4xl mb-2">🌸</span>
+              <p class="text-xs font-extrabold text-indigo-600 uppercase tracking-widest">Page 10: Bright Future</p>
+              <p class="text-[10px] text-slate-500 font-semibold mt-1 px-4 leading-normal">Aapka aur Khushi ka bond hamesha aise hi khilta rahe!</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Pagination Controls with elegant UI -->
+        <div class="flex items-center gap-6">
+          <button onclick="slideAlbumPrev()" class="px-4 py-1.5 bg-white shadow-md border border-purple-100 rounded-full text-xs text-purple-600 font-bold active:scale-95 transition flex items-center gap-1">
+            <i class="fa-solid fa-chevron-left text-[10px]"></i> Prev
+          </button>
+          <span id="albumPageCounter" class="text-xs font-bold text-slate-500 tracking-widest uppercase">Page 0 / 10</span>
+          <button onclick="slideAlbumNext()" class="px-4 py-1.5 bg-white shadow-md border border-purple-100 rounded-full text-xs text-purple-600 font-bold active:scale-95 transition flex items-center gap-1">
+            Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        </div>
+
+        <!-- Custom Requested Description for Album -->
+        <div class="w-full max-w-[340px] bg-amber-50/70 p-4 rounded-2xl border border-amber-100 text-center">
+          <p class="handwriting text-2xl text-slate-700 font-bold leading-normal">
+            "ek album jisme sab ek sath hai or isse mene sepical bana ki koshish bhi ki hai aap dekho"
+          </p>
+        </div>
+
+        <button onclick="nextPage()" class="px-8 py-3.5 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-bold rounded-full shadow-lg active:scale-95 transition text-xs tracking-widest uppercase">
+          Final Letter 💌
+        </button>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- PAGE 9: APOLOGY & GRATITUDE (FINAL NOTE) -->
+      <!-- ========================================== -->
+      <div id="page9" class="w-full hidden flex-col items-center justify-center text-center space-y-6 animate-fade-in">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-50 text-rose-600 text-[10px] font-bold tracking-widest border border-rose-100 uppercase">
+          💌 Heartfelt Ending
+        </span>
+
+        <h2 class="serif-title text-2xl font-bold text-slate-800">Ek Aakhiri Baat...</h2>
+
+        <div class="w-full bg-rose-50/60 p-5 rounded-3xl border border-rose-200/50 shadow-inner text-left relative">
+          <!-- Sparkle decoration -->
+          <div class="absolute -top-3 -right-2 text-3xl floating">✨</div>
+          
+          <p class="handwriting text-2xl text-slate-700 leading-relaxed">
+            And sorry agar meri koi si bhi baat ka bura laga ho ya mene kuch galat likha ho... <br><br>
+            Aapka bohot bohot <strong class="text-rose-500 font-bold">Thanks</strong> apna valuable time dene ke liye. Bas hamesha khush rahiye aur muskurati rahiye! ✨
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <button onclick="startCelebrationBurst()" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 active:scale-95 transition text-xs tracking-wider uppercase flex items-center gap-2">
+            Shower Sparkles 🎉
+          </button>
+          <p class="text-[9px] text-slate-400 uppercase font-extrabold tracking-widest">End of Sweet surprise web-doc</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PERSISTENT FOOTER BAR -->
+    <div class="px-6 py-4 bg-slate-900 text-center text-white/90 text-xs flex justify-between items-center rounded-b-[34px]">
+      <span class="font-medium">Created with Respect & Care</span>
+      <span class="text-[10px] text-pink-400 font-bold tracking-wider animate-pulse uppercase">For Didi 🌸</span>
+    </div>
+
+  </div>
+
+  <!-- Audio Playback Tool -->
+  <!-- Falling back to copyright-free relaxing piano music -->
+  <audio id="surpriseAudio" loop>
+    <source src="https://assets.mixkit.co/active_storage/sfx/123/123-100.wav" type="audio/wav">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- JAVASCRIPT APP STATE LOGIC -->
+  <script>
+    let activePageNum = 1;
+    const totalPagesCount = 9;
+    
+    // Page 6 Carousel State
+    let activeSlide6 = 1;
+    const maxSlide6Count = 5;
+
+    // Page 8 Compact Book Carousel State
+    let activeAlbumIndex = 0; // Starts from Cover (0)
+    const totalAlbumPages = 11; // Cover + Page 1 to 10
+
+    // Password State
+    const CORRECT_PASSWORD = "baniya4";
+
+    // Audio Play State
+    const surpriseAudio = document.getElementById('surpriseAudio');
+    let isTrackPlaying = false;
+
+    // PASSWORD VALIDATION
+    function revealPassword() {
+      const input = document.getElementById('passwordInput');
+      const eye = document.getElementById('eyeIcon');
+      if (input.type === "password") {
+        input.type = "text";
+        eye.className = "fa-solid fa-eye text-xs";
+      } else {
+        input.type = "password";
+        eye.className = "fa-solid fa-eye-slash text-xs";
+      }
+    }
+
+    function validatePassword() {
+      const enteredVal = document.getElementById('passwordInput').value.trim();
+      const lockBox = document.getElementById('lockWrapper');
+      const errorMsg = document.getElementById('lockErrorMsg');
+      
+      if (enteredVal === CORRECT_PASSWORD) {
+        lockBox.classList.add('unlocked');
+        errorMsg.classList.add('opacity-0');
+        
+        // Dynamic success particles
+        createParticles(40);
+        
+        setTimeout(() => {
+          document.getElementById('headerBackBtn').classList.remove('opacity-0', 'pointer-events-none');
+          nextPage();
+        }, 1200);
+      } else {
+        lockBox.classList.add('shake');
+        errorMsg.classList.remove('opacity-0');
+        setTimeout(() => {
+          lockBox.classList.remove('shake');
+        }, 500);
+      }
+    }
+
+    // MULTI-PAGE ROUTER
+    function navigateToPage(num) {
+      if (num < 1 || num > totalPagesCount) return;
+      
+      // Protect other pages before lock screen is bypassed
+      if (num > 1 && !document.getElementById('lockWrapper').classList.contains('unlocked')) {
+        return;
+      }
+
+      // Hide all pages
+      for (let i = 1; i <= totalPagesCount; i++) {
+        const page = document.getElementById(`page${i}`);
+        page.classList.add('hidden');
+        page.classList.remove('flex');
+      }
+
+      // Show current target page
+      const targetPage = document.getElementById(`page${num}`);
+      targetPage.classList.remove('hidden');
+      targetPage.classList.add('flex');
+
+      // Update Navigation Header text
+      document.getElementById('headerTitle').textContent = `PAGE ${num} / ${totalPagesCount}`;
+      activePageNum = num;
+
+      // Handle back button on locked screen
+      const backBtn = document.getElementById('headerBackBtn');
+      if (num > 1) {
+        backBtn.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        backBtn.classList.add('opacity-0', 'pointer-events-none');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextPage() {
+      navigateToPage(activePageNum + 1);
+    }
+
+    function prevPage() {
+      navigateToPage(activePageNum - 1);
+    }
+
+    // MUSIC COMPONENT
+    function toggleMusic() {
+      const disc = document.getElementById('musicDisc');
+      const btn = document.getElementById('playIcon');
+      const statusText = document.getElementById('musicStatusText');
+
+      if (isTrackPlaying) {
+        surpriseAudio.pause();
+        isTrackPlaying = false;
+        btn.className = "fa-solid fa-play ml-0.5 text-xs";
+        disc.style.animation = "none";
+        statusText.textContent = "Paused";
+      } else {
+        surpriseAudio.play().then(() => {
+          isTrackPlaying = true;
+          btn.className = "fa-solid fa-pause text-xs";
+          disc.style.animation = "spin 4s linear infinite";
+          statusText.textContent = "Playing ♪";
+          
+          if (!document.getElementById('disc-rotation-key')) {
+            let rotationStyle = document.createElement('style');
+            rotationStyle.id = 'disc-rotation-key';
+            rotationStyle.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } }';
+            document.head.appendChild(rotationStyle);
+          }
+        }).catch(err => console.log("User interaction required:", err));
+      }
+    }
+
+    // CAROUSEL LOGIC (PAGE 6)
+    function changeSlide6(targetIdx) {
+      let next = targetIdx;
+      if (next > maxSlide6Count) next = 1;
+      if (next < 1) next = maxSlide6Count;
+
+      for (let i = 1; i <= maxSlide6Count; i++) {
+        document.getElementById(`p6-slide${i}`).classList.add('hidden');
+        document.getElementById(`dot6-${i}`).className = "w-1.5 h-1.5 rounded-full bg-purple-200 transition-all";
+      }
+
+      document.getElementById(`p6-slide${next}`).classList.remove('hidden');
+      document.getElementById(`dot6-${next}`).className = "w-2.5 h-2.5 rounded-full bg-purple-500 transition-all";
+      
+      activeSlide6 = next;
+    }
+
+    function nextSlide() {
+      changeSlide6(activeSlide6 + 1);
+    }
+
+    function prevSlide() {
+      changeSlide6(activeSlide6 - 1);
+    }
+
+    // MOCK VIDEO PLAYER ACTIONS (PAGE 7)
+    function playMockVideo() {
+      document.getElementById('videoThumbnail').classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('mockVideoPlaying').classList.remove('hidden');
+      createParticles(15);
+    }
+
+    function stopMockVideo() {
+      document.getElementById('videoThumbnail').classList.remove('opacity-0', 'pointer-events-none');
+      document.getElementById('mockVideoPlaying').classList.add('hidden');
+    }
+
+    // 3D CAROUSEL BOOK ALBUM (PAGE 8 - FIXING CUTTING ISSUE)
+    function renderAlbumPages() {
+      for (let i = 0; i < totalAlbumPages; i++) {
+        const card = document.getElementById(`albumPage${i}`);
+        if (!card) continue;
+        
+        card.className = "album-card"; // Reset classes
+        
+        if (i === activeAlbumIndex) {
+          card.classList.add('active');
+        } else if (i < activeAlbumIndex) {
+          card.classList.add('prev-out');
+        } else {
+          card.classList.add('next-in');
+        }
+      }
+      
+      // Update Counter Text
+      document.getElementById('albumPageCounter').textContent = `Page ${activeAlbumIndex} / 10`;
+    }
+
+    function slideAlbumNext() {
+      if (activeAlbumIndex < totalAlbumPages - 1) {
+        activeAlbumIndex++;
+        renderAlbumPages();
+        createParticles(8);
+      }
+    }
+
+    function slideAlbumPrev() {
+      if (activeAlbumIndex > 0) {
+        activeAlbumIndex--;
+        renderAlbumPages();
+        createParticles(8);
+      }
+    }
+
+    // PARTICLES / CONFETTI GENERATOR
+    function createParticles(count = 20) {
+      const paletteColors = ['#f48fb1', '#ce93d8', '#80deea', '#fff59d', '#b9f6ca', '#ffe082'];
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const randomColor = paletteColors[Math.floor(Math.random() * paletteColors.length)];
+        
+        p.style.backgroundColor = randomColor;
+        p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = '-10px';
+        p.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        const fallTime = 1.8 + Math.random() * 2.2;
+        const drift = (Math.random() - 0.5) * 220;
+        
+        p.style.transition = `transform ${fallTime}s linear, top ${fallTime}s linear, left ${fallTime}s linear`;
+        document.body.appendChild(p);
+
+        setTimeout(() => {
+          p.style.top = '100vh';
+          p.style.left = `calc(${p.style.left} + ${drift}px)`;
+          p.style.transform = `rotate(${Math.random() * 720}deg) scale(0.6)`;
+        }, 50);
+
+        setTimeout(() => { p.remove(); }, fallTime * 1000);
+      }
+    }
+
+    function startCelebrationBurst() {
+      let burstCount = 0;
+      const burstInterval = setInterval(() => {
+        createParticles(25);
+        burstCount++;
+        if (burstCount > 4) clearInterval(burstInterval);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
+
+
+```
